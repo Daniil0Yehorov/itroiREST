@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Testing</title>
+    <script>
+        async function fetchUserById() {
+            const userId = document.getElementById('userId').value;
+            const response = await fetch(`/users/${userId}`);
+            const user = await response.json();
+            document.getElementById('output').textContent = JSON.stringify(user, null, 2);
+        }
+
+        async function createUser() {
+            const user = {
+                id: parseInt(document.getElementById('userIdCreate').value, 10),
+                type: document.getElementById('userType').value,
+                login: document.getElementById('userLogin').value,
+                password: document.getElementById('userPassword').value,
+                name: document.getElementById('userName').value,
+                phone: document.getElementById('userPhone').value,
+                email: document.getElementById('userEmail').value};
+            await fetch('/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            });
+            alert('User created!');
+        }
+
+        async function deleteUser() {
+            const userId = document.getElementById('deleteUserId').value;
+            await fetch(`/users/${userId}`, { method: 'DELETE' });
+            alert('User deleted!');
+        }
+
+        async function fetchAllProducts() {
+            const response = await fetch('/products');
+            const products = await response.json();
+            document.getElementById('output').textContent = JSON.stringify(products, null, 2);
+        }
+
+        async function addProduct() {
+            const product = {
+                id: parseInt(document.getElementById('productId').value, 10),
+                name: document.getElementById('productName').value,
+                description: document.getElementById('productDescription').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value,
+                countInStock: parseInt(document.getElementById('productStock').value, 10)
+            };
+            await fetch('/products', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(product)
+            });
+            alert('Product added!');
+        }
+
+        async function fetchCartByUserId() {
+            const userId = document.getElementById('cartUserId').value;
+            const response = await fetch(`/carts/${userId}`);
+            const cart = await response.json();
+            document.getElementById('output').textContent = JSON.stringify(cart, null, 2);
+        }
+
+        async function checkoutCart() {
+            const userId = document.getElementById('checkoutUserId').value;
+            const response = await fetch(`/carts/${userId}/checkout`, { method: 'POST' });
+            const cart = await response.json();
+            document.getElementById('output').textContent = JSON.stringify(cart, null, 2);
+        }
+    </script>
+</head>
+<body>
+<h1>API Testing</h1>
+
+<h2>User Operations</h2>
+<div>
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId">
+    <button onclick="fetchUserById()">Get User by ID</button>
+</div>
+
+<div>
+    <h3>Create User</h3>
+    <input type="number" id="userIdCreate" class="form-control mb-2" placeholder="ID">
+    <input type="text" id="userType" class="form-control mb-2" placeholder="Type (e.g., admin/user)">
+    <input type="text" id="userLogin" class="form-control mb-2" placeholder="Login">
+    <input type="password" id="userPassword" class="form-control mb-2" placeholder="Password">
+    <input type="text" id="userName" class="form-control mb-2" placeholder="Name">
+    <input type="text" id="userPhone" class="form-control mb-2" placeholder="Phone">
+    <input type="email" id="userEmail" class="form-control mb-2" placeholder="Email">
+    <button class="btn btn-success mt-2" onclick="createUser()">Create User</button>
+</div>
+
+<div>
+    <label for="deleteUserId">Delete User ID:</label>
+    <input type="text" id="deleteUserId">
+    <button onclick="deleteUser()">Delete User</button>
+</div>
+
+<h2>Product Operations</h2>
+<div>
+    <button onclick="fetchAllProducts()">Get All Products</button>
+</div>
+
+<div>
+    <h3>Add Product</h3>
+    <input type="number" id="productId" class="form-control mb-2" placeholder="ID">
+    <input type="text" id="productName" class="form-control mb-2" placeholder="Product Name">
+    <input type="text" id="productDescription" class="form-control mb-2" placeholder="Description">
+    <input type="number" id="productPrice" class="form-control mb-2" placeholder="Price">
+    <input type="text" id="productCategory" class="form-control mb-2" placeholder="Category">
+    <input type="number" id="productStock" class="form-control mb-2" placeholder="Stock Count">
+    <button class="btn btn-success mt-2" onclick="addProduct()">Add Product</button>
+</div>
+
+<h2>Cart Operations</h2>
+<div>
+    <label for="cartUserId">User ID for Cart:</label>
+    <input type="text" id="cartUserId">
+    <button onclick="fetchCartByUserId()">Get Cart by User ID</button>
+</div>
+
+<div>
+    <label for="checkoutUserId">User ID for Checkout:</label>
+    <input type="text" id="checkoutUserId">
+    <button onclick="checkoutCart()">Checkout Cart</button>
+</div>
+
+<h2>Output</h2>
+<pre id="output"></pre>
+</body>
+</html>
