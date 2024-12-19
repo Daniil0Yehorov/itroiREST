@@ -8,6 +8,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Testing</title>
     <script>
+        async function updateUser() {
+            const userId = document.getElementById('updateUserId').value;
+            const updatedUser = {
+                name: document.getElementById('updateUserName').value,
+                phone: document.getElementById('updateUserPhone').value,
+                email: document.getElementById('updateUserEmail').value
+            };
+            await fetch(`/users/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedUser)
+            });
+            alert('User updated!');
+        }
+
+        async function deleteProduct() {
+            const productId = document.getElementById('deleteProductId').value;
+            await fetch(`/products/${productId}`, { method: 'DELETE' });
+            alert('Product deleted!');
+        }
+
+        async function updateProduct() {
+            const productId = document.getElementById('updateProductId').value;
+            const updatedProduct = {
+                name: document.getElementById('updateProductName').value,
+                description: document.getElementById('updateProductDescription').value,
+                price: parseFloat(document.getElementById('updateProductPrice').value),
+                category: document.getElementById('updateProductCategory').value,
+                countInStock: parseInt(document.getElementById('updateProductStock').value, 10)
+            };
+            await fetch(`/products/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProduct)
+            });
+            alert('Product updated!');
+        }
         async function fetchUserById() {
             const userId = document.getElementById('userId').value;
             const response = await fetch(`/users/${userId}`);
@@ -132,6 +169,25 @@
     <input type="text" id="checkoutUserId">
     <button onclick="checkoutCart()">Checkout Cart</button>
 </div>
+<h3>Update User</h3>
+<input type="number" id="updateUserId" class="form-control mb-2" placeholder="User ID to Update">
+<input type="text" id="updateUserName" class="form-control mb-2" placeholder="New Name">
+<input type="text" id="updateUserPhone" class="form-control mb-2" placeholder="New Phone">
+<input type="email" id="updateUserEmail" class="form-control mb-2" placeholder="New Email">
+<button class="btn btn-warning mt-2" onclick="updateUser()">Update User</button>
+
+<h3>Delete Product</h3>
+<input type="number" id="deleteProductId" class="form-control mb-2" placeholder="Product ID to Delete">
+<button class="btn btn-danger mt-2" onclick="deleteProduct()">Delete Product</button>
+
+<h3>Update Product</h3>
+<input type="number" id="updateProductId" class="form-control mb-2" placeholder="Product ID to Update">
+<input type="text" id="updateProductName" class="form-control mb-2" placeholder="New Product Name">
+<input type="text" id="updateProductDescription" class="form-control mb-2" placeholder="New Description">
+<input type="number" id="updateProductPrice" class="form-control mb-2" placeholder="New Price">
+<input type="text" id="updateProductCategory" class="form-control mb-2" placeholder="New Category">
+<input type="number" id="updateProductStock" class="form-control mb-2" placeholder="New Stock Count">
+<button class="btn btn-warning mt-2" onclick="updateProduct()">Update Product</button>
 
 <h2>Output</h2>
 <pre id="output"></pre>
